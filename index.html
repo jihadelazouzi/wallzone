@@ -1,0 +1,81 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wallzone</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b0d12;color:#fff;font-family:Arial,sans-serif}
+header{padding:24px 18px}
+h1{font-size:30px;margin:0}
+h1 span{color:#c9ff57}
+p{color:#a3a9b7}
+input{width:100%;padding:14px;border:1px solid #303542;border-radius:12px;background:#171b24;color:white;font-size:16px}
+nav{display:flex;gap:8px;overflow:auto;padding:0 14px 20px}
+button{padding:10px 14px;border:0;border-radius:20px;background:#252a35;color:white}
+button.active{background:#c9ff57;color:#111}
+#gallery{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 12px}
+.card{position:relative;overflow:hidden;border-radius:14px;aspect-ratio:3/4;background:#20242d}
+.card img{width:100%;height:100%;object-fit:cover}
+.label{position:absolute;bottom:0;left:0;right:0;padding:12px;background:#0009;font-size:13px}
+footer{text-align:center;padding:25px;color:#9ba3b4}
+</style>
+</head>
+<body>
+<header>
+<h1>wall<span>zone</span> ✳</h1>
+<p>Find your vibe. Change your screen.</p>
+<input id="search" placeholder="Search wallpapers...">
+</header>
+<nav id="filters">
+<button class="active" data-cat="All">For you</button>
+<button data-cat="Nature">Nature</button>
+<button data-cat="Cars">Cars</button>
+<button data-cat="Space">Space</button>
+<button data-cat="Minimal">Minimal</button>
+</nav>
+<main id="gallery"></main>
+<footer>WALLZONE · Your screen, your style.</footer>
+<script>
+const data=[
+["Mountain Escape","Nature","photo-1464822759023-fed622ff2c3b"],
+["Ocean Blue","Nature","photo-1500375592092-40eb2168fd21"],
+["Night Drive","Cars","photo-1492144534655-ae79c964c9d7"],
+["Deep Space","Space","photo-1462331940025-496dfbfc7564"],
+["Desert Mood","Minimal","photo-1509316785289-025f5b846b35"],
+["Forest Dream","Nature","photo-1448375240586-882707db888b"],
+["Cosmic Blue","Space","photo-1614730321146-b6fa6a46bcb4"],
+["Golden Hour","Minimal","photo-1470770841072-f978cf4d019e"]
+];
+let cat="All";
+const gallery=document.getElementById("gallery");
+function show(){
+gallery.innerHTML="";
+const q=document.getElementById("search").value.toLowerCase();
+data.filter(x=>(cat==="All"||x[1]===cat)&&x[0].toLowerCase().includes(q)).forEach(x=>{
+const el=document.createElement("div");
+el.className="card";
+const img=document.createElement("img");
+img.loading="lazy";
+img.src="https://images.unsplash.com/"+x[2]+"?auto=format&fit=crop&w=700&q=80";
+img.alt=x[0];
+const label=document.createElement("div");
+label.className="label";
+label.textContent=x[0];
+el.append(img,label);
+el.onclick=()=>window.open(img.src,"_blank");
+gallery.append(el);
+});
+}
+document.querySelectorAll("[data-cat]").forEach(b=>b.onclick=()=>{
+cat=b.dataset.cat;
+document.querySelectorAll("[data-cat]").forEach(x=>x.classList.toggle("active",x===b));
+show();
+});
+document.getElementById("search").addEventListener("input",show);
+show();
+</script>
+</body>
+</html>
